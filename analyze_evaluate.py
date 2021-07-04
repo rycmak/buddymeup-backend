@@ -16,7 +16,7 @@ def evaluate_matches(df_matched):
     plt.title('Scoring distribution', fontsize=18)
     plt.ylabel('Frequency', fontsize=16)
     # scores
-    avg_sc = scores.sum() / len(df_matched)
+    avg_sc = scores.sum() / (2 *len(df_matched))
     min_sc = scores.min()
     max_sc = scores.max()
     st.write("\nthe average score is: ", avg_sc)
