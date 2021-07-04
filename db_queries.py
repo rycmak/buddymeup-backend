@@ -35,15 +35,44 @@ def m_single_insert(conn, df):
     """
     cur = conn.cursor()
     try:
-        # Inserting each row
         for i in df.index:
-            query = """INSERT INTO matches (fk_round_id, fk_user_1_id, fk_user_2_id, algo_score_u1, algo_score_u2) 
-                        VALUES('{0}','{1}','{2}','{3}','{4}') ON CONFLICT ON CONSTRAINT round_u1_u2 DO NOTHING
-                        ;""".format(df['fk_round_id'][i], df['fk_user_1_id'][i], df['fk_user_2_id'][i],
-                                    df['algo_score_u1'][i],
-                                    df['algo_score_u2'][i])
+            # Insert each pair into matches table
+            cur.execute("""INSERT INTO matches (
+                fk_round_id, fk_user_1_id, fk_user_2_id, algo_score_u1, algo_score_u2) 
+                VALUES('{0}','{1}','{2}','{3}','{4}') 
+                ON CONFLICT ON CONSTRAINT round_u1_u2 DO NOTHING;
+                """.format(df['fk_round_id'][i], df['fk_user_1_id'][i], df['fk_user_2_id'][i],
+                           df['algo_score_u1'][i],
+                           df['algo_score_u2'][i]))
+            # Get id of newly-inserted match
+            cur.execute("""SELECT id FROM matches WHERE fk_round_id = '{0}' 
+                    AND fk_user_1_id = '{1}' AND fk_user_2_id = '{2}'
+                    """.format(df["fk_round_id"][i], df["fk_user_1_id"][i], df["fk_user_2_id"][i]))
+            match_id, = cur.fetchone()
 
-            cur.execute(query)
+            # Update users_rounds table with match id for each participant in pair
+            for user_id in [df["fk_user_1_id"][i], df["fk_user_2_id"][i]]:
+                # First, select row with relevant round_id and user_id in users_rounds table
+                cur.execute("""SELECT id, fk_match_id FROM users_rounds WHERE 
+                        fk_round_id = '{0}' AND fk_user_id = '{1}'
+                        """.format(df["fk_round_id"][i], user_id))
+                users_rounds_id, user_match_id = cur.fetchone()
+                if user_match_id is None:  
+                    # no match for user in this round yet
+                    cur.execute(f"""UPDATE users_rounds SET fk_match_id = {match_id}
+                            WHERE fk_round_id = {df["fk_round_id"][i]} 
+                            AND fk_user_id = {user_id}""")
+                else:
+                    # user already has one match for this round; insert new row for second match
+                    cur.execute(f"""INSERT INTO users_rounds (
+                                    timestamp, fk_user_id, fk_location_id, gender, age, topic, experience, 
+                                    mentor_choice, relation_pref, freq_pref, gender_pref, timezone_pref, 
+                                    amount_buddies, objectives, personal_descr, comments, fk_round_id, fk_match_id)
+                                    SELECT timestamp, fk_user_id, fk_location_id, gender, age, topic, experience, 
+                                    mentor_choice, relation_pref, freq_pref, gender_pref, timezone_pref, 
+                                    amount_buddies, objectives, personal_descr, comments, fk_round_id, 
+                                    {match_id} FROM users_rounds WHERE id = {users_rounds_id}""")
+            
             conn.commit()
 
     except (Exception, psycopg2.DatabaseError) as error:
