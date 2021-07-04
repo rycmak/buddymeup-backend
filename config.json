@@ -1,0 +1,36 @@
+{
+  "signup_open": "True",
+  "round_num_id" : "15",
+  "dates": {
+    "year": "2021",
+    "round_num": "1",
+    "start_date": "2021-07-05",
+    "end_date": "2021-09-13",
+    "signup_date_html": "June 21, 2021",
+    "start_date_html": "July 05, 2021"
+  },
+  "db": {
+    "user": "postgres",
+    "host": "localhost",
+    "db_name": "buddymeup"
+  },
+  "filepath": {
+    "python": "datafiles_sens/python/"
+  },
+  "file_name": {
+    "signups": "/survey_response.csv",
+    "buddy_results" : "_buddies.csv",
+    "data_announc" : "_data_announc.csv",
+    "prior_matches" : "all_prior_matches.csv"
+  },
+  "contact": {
+    "email": "buddymeup@womenwhocode.com",
+    "slack": "@Isabella"
+  },
+  "variables": {
+    "attributes" : ["id", "email", "name", "slack_name", "gender", "timezone", "age", "topic",
+              "experience", "mentor_choice", "relation_pref", "freq_pref", "gender_pref",
+              "timezone_pref", "amount_buddies", "objectives", "personal_descr"],
+    "topics" : ["data science", "mobile", "machine learning", "backend", "frontend"]
+  }
+}

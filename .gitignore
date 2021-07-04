@@ -1,0 +1,14 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# virtual envs
+venv/
+
+# functions in work
+add_functs.py
+
+# test scripts and data
+test*
+
+# vscode settings
+.vscode/
