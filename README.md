@@ -1,2 +1,2 @@
 # buddymeup-backend
-Backend code to provide UI for BuddyMeUp matching algorithm
+Backend code to provide UI for [BuddyMeUp](https://www.buddymeup.net) matching algorithm.
