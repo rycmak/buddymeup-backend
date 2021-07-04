@@ -28,7 +28,7 @@ def display_match_UI():
     st.write("Done!")
   if st.button("Analyze matches"):
     st.write("Analyzing matches...")
-    match_algo.analyze_matches()
+    match_algo.analyze_matches(st.session_state.matched_df)
     st.write("Done!")
   if st.button("Send emails"):
     match_algo.email_notifications()

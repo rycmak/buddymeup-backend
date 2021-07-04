@@ -1,6 +1,7 @@
 """
 functions to analyze the dataset and evaluate the matched buddies
 """
+import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 import datetime as dt
@@ -18,12 +19,11 @@ def evaluate_matches(df_matched):
     avg_sc = scores.sum() / len(df_matched)
     min_sc = scores.min()
     max_sc = scores.max()
-    print("\nthe average score is: ", avg_sc)
-    print("\nthe minimum score is: ", min_sc)
-    print("\nthe maximum score is: ", max_sc)
+    st.write("\nthe average score is: ", avg_sc)
+    st.write("\nthe minimum score is: ", min_sc)
+    st.write("\nthe maximum score is: ", max_sc)
     low_scored = df_matched.loc[((df_matched["score_u1"] < 0.70) | (df_matched["score_u2"] < 0.70))]
-    print("manually check low scored matches:", low_scored[["email_1", "email_2"]])
-    return
+    st.write("manually check low scored matches:", low_scored[["email_1", "email_2"]])
 
 
 # def get_buddies(name1, df_matched):

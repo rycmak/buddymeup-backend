@@ -20,8 +20,6 @@ def match_buddies(data, scores_df, email_ids, idx_dict):
 
 def analyze_matches(matched_df):
   ae.evaluate_matches(matched_df)
-  #st.write("Saving matches to db or .csv...")
-  #m.save_matches(df_matched)
 
 def save_matches_db(matched_df):
   m.save_matches(matched_df)
